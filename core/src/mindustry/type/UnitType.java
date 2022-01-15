@@ -144,7 +144,7 @@ public class UnitType extends UnlockableContent{
 
     public Seq<Weapon> weapons = new Seq<>();
     public TextureRegion baseRegion, legRegion, region, shadowRegion, cellRegion,
-        softShadowRegion, jointRegion, footRegion, legBaseRegion, baseJointRegion, outlineRegion;
+    softShadowRegion, jointRegion, footRegion, legBaseRegion, baseJointRegion, outlineRegion;
     public TextureRegion[] wreckRegions;
     public static float alpha = 1f; // FINISHME: Seriously, why the hell is this static? Shouldn't this be a variable tied to the unit?!?
 
@@ -243,7 +243,7 @@ public class UnitType extends UnlockableContent{
             table.row();
             table.label(() -> Iconc.settings + " " + (long)unit.flag + " (" + (ai.controller != null ? ai.controller.tileX() + ", " + ai.controller.tileY() : "?, ?") + ")").color(Color.lightGray).wrap().left();
         }
-        
+
         table.row();
     }
 
@@ -599,7 +599,7 @@ public class UnitType extends UnlockableContent{
 
     public void draw(Unit unit){
         Mechc mech = unit instanceof Mechc ? (Mechc)unit : null;
-        alpha = ClientVars.hidingUnits || ClientVars.hidingAirUnits && unit.isFlying() ? 0 : (unit.controller() instanceof FormationAI || unit.playerNonNull().assisting && !unit.isLocal()) ? .3f : 1;
+        alpha = ClientVars.hidingUnits || ClientVars.hidingAirUnits && unit.isFlying() ? 0 : (unit.controller() instanceof FormationAI || unit.playerNonNull().assisting && !unit.isLocal()) ? Core.settings.getInt("opacityofformationunit") / 100f : 1;
         if (alpha == 0) return; // Don't bother drawing what we can't see.
         float z = unit.elevation > 0.5f ? (lowAltitude ? Layer.flyingUnitLow : Layer.flyingUnit) : groundLayer + Mathf.clamp(hitSize / 4000f, 0, 0.01f);
 
@@ -691,8 +691,8 @@ public class UnitType extends UnlockableContent{
     public void drawShield(Unit unit){
         float radius = unit.hitSize() * 1.3f;
         Fill.light(unit.x, unit.y, Lines.circleVertices(radius), radius,
-            Color.clear,
-            Tmp.c2.set(unit.team.color).lerp(Color.white, Mathf.clamp(unit.hitTime() / 2f)).a(0.7f * unit.shieldAlpha() * alpha)
+        Color.clear,
+        Tmp.c2.set(unit.team.color).lerp(Color.white, Mathf.clamp(unit.hitTime() / 2f)).a(0.7f * unit.shieldAlpha() * alpha)
         );
     }
 
@@ -781,16 +781,16 @@ public class UnitType extends UnlockableContent{
         Draw.color(engineColor == null ? unit.team.color : engineColor);
         Draw.alpha(alpha);
         Fill.circle(
-            unit.x + Angles.trnsx(unit.rotation + 180, offset),
-            unit.y + Angles.trnsy(unit.rotation + 180, offset),
-            (engineSize + Mathf.absin(Time.time, 2f, engineSize / 4f)) * scale
+        unit.x + Angles.trnsx(unit.rotation + 180, offset),
+        unit.y + Angles.trnsy(unit.rotation + 180, offset),
+        (engineSize + Mathf.absin(Time.time, 2f, engineSize / 4f)) * scale
         );
         Draw.color(engineColorInner);
         Draw.alpha(alpha);
         Fill.circle(
-            unit.x + Angles.trnsx(unit.rotation + 180, offset - 1f),
-            unit.y + Angles.trnsy(unit.rotation + 180, offset - 1f),
-            (engineSize + Mathf.absin(Time.time, 2f, engineSize / 4f)) / 2f  * scale
+        unit.x + Angles.trnsx(unit.rotation + 180, offset - 1f),
+        unit.y + Angles.trnsy(unit.rotation + 180, offset - 1f),
+        (engineSize + Mathf.absin(Time.time, 2f, engineSize / 4f)) / 2f  * scale
         );
         Draw.color();
     }
